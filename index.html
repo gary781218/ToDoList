@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+    <style>
+        #wrap {
+            width: 620px;
+            margin: 22px auto;
+            background: #E1E1E1;
+        }
+
+        * {
+            box-sizing: border-box;
+            border: 0px;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+            background: #E1E1E1;
+        }
+
+        .header {
+            width: 100%;
+            height: 76px;
+            background: #4A90E2;
+        }
+
+        .header-box {
+            margin: 0 auto;
+            text-align: center;
+            line-height: 76px;
+        }
+
+        .header-item {
+            width: 220px;
+            height: 76px;
+            font-family: Roboto-Regular;
+            font-size: 24px;
+            background: #4A90E2;
+            color: #00408B;
+            text-align: center;
+            /* line-height: 28px; */
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .header-current {
+            font-weight: bold;
+            font-family: Roboto-Medium;
+            font-size: 24px;
+            color: #FFFFFF;
+            text-align: center;
+            border-bottom: 6px solid #00408B;
+        }
+
+        .container {
+            width: 620px;
+            margin-top: 9px;
+            background: #F2F2F2;
+            border-radius: 5px;
+
+        }
+
+
+        .container:nth-child(2) {
+            margin-top: 24px;
+        }
+
+        .list-header {
+            width: 100%;
+            height: 76px;
+            line-height: 76px;
+            /* background: #F2F2F2; */
+            border-radius: 5px 5px 0 0;
+            box-sizing: content-box;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            margin-left: 32px;
+            margin-right: 16px;
+        }
+
+        .listname {
+            width: 248px;
+            height: 28px;
+            font-family: Roboto-Medium;
+            font-size: 24px;
+            color: #000000;
+            background: #F2F2F2;
+            font-weight: bold;
+        }
+
+        .listname::placeholder {
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .list-box-left {
+            margin-left: -4px;
+            width: 70%;
+            display: inline-block;
+        }
+
+        .list-box-right {
+            width: 30%;
+            display: inline-block;
+            text-align: right;
+        }
+
+        .list-box-right>i {
+            margin-right: 24px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .fas.fa-star {
+            color: #F5A623;
+        }
+
+        .important-to-do {
+            background: #FFF2DC;
+        }
+
+        .editing {
+            color: #4A90E2;
+        }
+
+        .list-content {
+            width: 100%;
+        }
+
+        .item-name {
+            margin-top: 22px;
+            margin-left: 72px;
+        }
+
+        .item-name>i {
+            font-size: 20px;
+        }
+
+        .item-name>span {
+            margin-left: 9px;
+            font-family: Roboto-Medium;
+            font-weight: bold;
+            font-size: 20px;
+            color: #000000;
+        }
+
+        .item-content {
+            margin-top: 11px;
+            margin-left: 95px;
+        }
+
+        .item-content>input,
+        .item-content>textarea {
+            font-family: Roboto-Regular;
+            font-size: 16px;
+            color: #000000;
+        }
+
+        .file-icon {
+            font-size: 30px;
+        }
+
+        .footer {
+            margin-top: 32px;
+        }
+
+        .footer>div {
+            width: 49.5%;
+            height: 60px;
+            display: inline-block;
+            font-family: Roboto-Regular;
+            font-size: 24px;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .cancel {
+            background: #FFFFFF;
+            color: #D0021B;
+            cursor: pointer;
+        }
+
+        .addtask {
+            background: #4A90E2;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .listdeleted {
+            text-decoration: line-through;
+        }
+
+        .content-status-icon {
+            width: 500px;
+            height: 34%;
+            margin-top: 0px;
+            margin-left: 72px;
+
+        }
+
+        .content-status-icon>* {
+            height: 18px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .new-list {
+            border-bottom: 2px solid #C8C8C8;
+        }
+
+        .list-header-old {
+            height: 102px;
+        }
+
+        .list-box-old {
+            height: 35%;
+        }
+
+        .fa-trash-alt {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-box">
+            <div id="header-item_0" class="header-item header-current" onclick="navselect(0);showMyTasks();">My Tasks
+            </div>
+            <div id="header-item_1" class="header-item" onclick="navselect(1);showList2Web(true);">In Progress</div>
+            <div id="header-item_2" class="header-item" onclick="navselect(2);showList2Web(false);">Completed</div>
+            <div id="header-item_3" class="header-item" onclick="navselect(3);showTrash();">Trash</div>
+        </div>
+    </div>
+    <div id="wrap"></div>
+</body>
+
+</html>
+<script>
+
+    var object = [
+        {
+            id: _uuid(),
+            name: "",
+            date: "",
+            time: "",
+            comment: "",
+            hasAttr: {
+                isnew: true,
+                important: false,
+                hasDate: false,
+                hasTime: false,
+                hascomment: false
+            },
+            isDelete: false
+        },
+        {
+            id: _uuid(),
+            name: "test1",
+            date: "1999-01-01",
+            time: "12:01",
+            comment: "這是test1",
+            hasAttr: {
+                isnew: false,
+                important: true,
+                hasDate: true,
+                hasTime: true,
+                hascomment: true
+            },
+            isDelete: false
+
+        },
+        {
+            id: _uuid(),
+            name: "test2",
+            date: "1999-02-02",
+            time: "12:02",
+            comment: "這是test2",
+            hasAttr: {
+                isnew: false,
+                important: false,
+                hasDate: true,
+                hasTime: false,
+                hascomment: true
+            },
+            isDelete: false
+        },
+        {
+            id: _uuid(),
+            name: "test3",
+            date: "1999-03-03",
+            time: "12:03",
+            comment: "這是test3",
+            hasAttr: {
+                isnew: false,
+                important: true,
+                hasDate: true,
+                hasTime: false,
+                hascomment: true
+            },
+            isDelete: false
+        },
+        {
+            id: _uuid(),
+            name: "test4",
+            date: "1999-04-04",
+            time: "12:04",
+            comment: "這是test4",
+            hasAttr: {
+                isnew: false,
+                important: false,
+                hasDate: true,
+                hasTime: false,
+                hascomment: true
+            },
+            isDelete: false
+        }
+    ]
+    var trash = [];
+
+    window.onload = showMyTasks();
+    
+    function initialization(i) {
+
+    function navselect(index) {
+        var items = document.querySelectorAll(".header-item");
+        items.forEach(x => x.classList.remove("header-current"));
+        document.getElementById("header-item_" + index).classList.add("header-current");
+    }
+
+        var container_css = object[i].hasAttr.important == true ? 'important-to-do' : '';
+        var htmlTarget = document.getElementById("wrap");
+        var target = object[i];
+        htmlTarget.insertAdjacentHTML("beforeend",
+            `
+            <div id="container_${i}" class="container ${container_css}">
+                <div id="list_header_${i}" class="list-header new-list">
+                    <div class="list-box-left">
+                        <input id="checkbox_${i}" class="checkbox" type="checkbox">
+                        <input id="title_${i}" class="listname ${container_css}" type="text" placeholder="Type Something Here…" value=${target.name}>
+                    </div>
+                    <div class="list-box-right">
+                        <i id="star_${i}" class="far fa-star" onclick="starClick('${target.id}',${i})"></i>
+                        <i id="pen_${i}" class="fas fa-pen editing" onclick="penClick(${i})"></i>
+                    </div>
+                    <div id="subheader_${i}"></div>
+                </div>
+                <div id="list-content_${i}" class="list-content">
+                    <div class="item-name">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Deadline</span>
+                    </div>
+                    <div class="item-content">
+                        <input id="date_${i}" type="date" placeholder="yyyy/mm/dd" value="${target.date}">
+                        <input id="time_${i}" type="time" placeholder="hh:mm" value="${target.time}">
+                    </div>
+                    <div class="item-name">
+                        <i class="far fa-file"></i>
+                        <span>File</span>
+                    </div>
+                    <div class="item-content">
+                        <i class="fas fa-plus-square file-icon"></i>
+                    </div>
+                    <div class="item-name">
+                        <i class="far fa-comment-dots"></i>
+                        <span>Comment</span>
+                    </div>
+                    <div class="item-content">
+                        <textarea id="comment_${i}" name="Tye" id="" cols="50" rows="5" placeholder="Type your memo here…">${target.comment}</textarea>
+                    </div>
+                    <div class="footer">
+                        <div class="cancel">Cancel</div>
+                        <div class="addtask" onclick="addTask()">Add Task</div>
+                    </div>
+                </div>
+                
+            </div>
+            `
+        )
+    }
+    function showList(i) {
+        var htmlTarget = document.getElementById("wrap");
+        var target = object[i];
+        var star_css = object[i].hasAttr.important == true ? 'fas' : 'far';
+        var container_css = object[i].hasAttr.important == true ? 'important-to-do' : '';
+        var headericon_deadline = object[i].hasAttr.hasDate == true ? '<i class="far fa-calendar-alt"></i>' : '';
+        var headericon_comment = object[i].hasAttr.hascomment == true ? '<i class="far fa-comment-dots"></i>' : '';
+
+        htmlTarget.insertAdjacentHTML("beforeend",
+            `
+            <div id="container_${i}" class="container ${container_css}">
+                <div id="list-header_${i}" class="list-header list-header-old old">
+                    <div class="list-box list-box-old">
+                        <div class="list-box-left list-box-old">
+                            <input id="checkbox_${i}" class="checkbox" type="checkbox" onclick="isDelete('${target.id}',${i})">
+                            <input id="title_${i}" class="listname ${container_css}" type="text" placeholder="Type Something Here…" value="${target.name}">
+                        </div>
+                        <div class="list-box-right list-box-old">
+                            <i id="star_${i}" class="${star_css} fa-star" onclick="starClick('${target.id}',${i})"></i>
+                            <i id="pen_${i}" class="fas fa-pen" onclick="penClick(${i})"></i>
+                            <i class="fas fa-trash-alt" onclick="deleteTask('${target.id}',${i})"></i>
+                        </div>
+                    </div>
+                    <div id="subheader_${i}" class="content-status-icon">
+                        ${headericon_deadline}
+                        <p>${target.date}</p>
+                        ${headericon_comment}
+                    </div>
+                </div>
+                <div id="list-content_${i}" class="list-content old-list hidden">
+                    <div class="item-name">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Deadline</span>
+                    </div>
+                    <div class="item-content">
+                        <input id="date_${i}" type="date" placeholder="yyyy/mm/dd" value="${target.date}">
+                        <input id="time_${i}" type="time" placeholder="hh:mm" value="${target.time}">
+                    </div>
+                    <div class="item-name">
+                        <i class="far fa-file"></i>
+                        <span>File</span>
+                    </div>
+                    <div class="item-content">
+                        <i class="fas fa-plus-square file-icon"></i>
+                    </div>
+                    <div class="item-name">
+                        <i class="far fa-comment-dots"></i>
+                        <span>Comment</span>
+                    </div>
+                    <div class="item-content">
+                        <textarea id="comment_${i}" name="Tye" id="" cols="50" rows="5" placeholder="Type your memo here…">${target.comment}</textarea>
+                    </div>
+                        <div class="footer">
+                        <div class="cancel">Cancel</div>
+                        <div class="addtask" onclick="saveTask('${target.id}',${i})">Save Task</div>
+                    </div>
+                </div>
+                
+            </div>
+            `
+        )
+
+        var checkbox = document.getElementById("checkbox_" + i);
+        var title = document.getElementById("title_" + i);
+
+        if (object[i].isDelete === true) {
+            checkbox.setAttribute("checked", "");
+            title.classList.add("listdeleted");
+        }
+        else {
+            checkbox.removeAttribute("checked");
+            title.classList.remove("listdeleted");
+        }
+    }
+    function starClick(id, i) {
+        var target = object.find(x => x.id == id);
+        target.hasAttr.important = !target.hasAttr.important;
+        var star = document.getElementById("star_" + i);
+        var container = document.getElementById("container_" + i);
+        var tile = document.getElementById("title_" + i);
+
+        var star_css = target.hasAttr.important == true ? 'fas ' : 'far ';
+        var container_css = target.hasAttr.important == true ? 'important-to-do ' : '';
+        var tile_css = target.hasAttr.important == true ? 'important-to-do ' : '';
+
+        star.setAttribute("class", star_css + "fa-star");
+        container.setAttribute("class", container_css + "container");
+        tile.setAttribute("class", "listname " + tile_css);
+    }
+    function penClick(i) {
+        var pens = document.querySelectorAll(".fa-pen");
+        pens.forEach(x => x.classList.remove("editing"));
+        var pen = document.getElementById("pen_" + i);
+        pen.classList.add("editing");
+
+        var listContents = document.querySelectorAll(".list-content");
+        listContents.forEach(x => x.classList.add("hidden"));
+        var listContent = document.getElementById("list-content_" + i);
+        listContent.classList.remove("hidden");
+
+        var iconboxs = document.querySelectorAll(".content-status-icon");
+        iconboxs.forEach(x => x.classList.remove("hidden"));
+        var iconbox = document.getElementById("subheader_" + i);
+        iconbox.classList.add("hidden");
+
+        var isold = document.querySelectorAll(".old");
+        isold.forEach(x => x.classList.remove("new-list"));
+        isold.forEach(x => x.classList.add("list-header-old"));
+
+        var listheader = document.getElementById("list_header_" + i);
+        listheader.classList.remove("list-header-old");
+        listheader.classList.add("new-list");
+
+    }
+    function isDelete(id, i) {
+        var target = object.find(x => x.id == id);
+        target.isDelete = !target.isDelete;
+        var checkbox = document.getElementById("checkbox_" + i);
+        var title = document.getElementById("title_" + i);
+
+        if (target.isDelete == true) {
+            checkbox.setAttribute("checked", true);
+            title.classList.add("listdeleted");
+        }
+        else {
+            checkbox.setAttribute("checked", false);
+            title.classList.remove("listdeleted");
+        }
+    }
+    function addTask() {
+
+        var title = document.getElementById("title_" + 0);
+        var deadline = document.getElementById("date_" + 0);
+        var time = document.getElementById("time_" + 0);
+        var comment = document.getElementById("comment_" + 0);
+        var star = document.getElementById("star_0");
+
+        console.log(title.value);
+        console.log(deadline.value);
+        console.log(time.value);
+        console.log(comment.value);
+
+        var important = !star.classList.contains("far");
+        var hasDate = deadline == "" ? false : true;
+        var hasTime = time == "" ? false : true;
+        var hasComment = comment == "" ? false : true;
+
+        var data = {
+            id: _uuid(),
+            name: title.value,
+            date: deadline.value,
+            time: time.value,
+            comment: comment.value,
+            hasAttr: {
+                isnew: false,
+                important: important,
+                hasDate: hasDate,
+                hasTime: hasTime,
+                hasComment: hasComment
+            },
+            isDelete: false
+        }
+
+        object.push(data);
+        alert("已加入成功!");
+        showMyTasks();
+    }
+    function saveTask(id, i) {
+
+        var target = object.find(x => x.id == id);
+
+        target.name = document.getElementById('title_' + i).value;
+        target.important = document.getElementById('star_' + i).classList.contains('fas') ? true : false;
+        target.date = document.getElementById('date_' + i).value;;
+        target.time = document.getElementById('time_' + i).value;
+        target.comment = document.getElementById('comment_' + i).value;
+
+        console.log(target);
+        alert("已修改成功!!");
+    }
+    function deleteTask(id, i) {
+        if (confirm("是否確定要刪除")) {
+            trash.push(object.find(x => x.id == id));
+            object_temp = object.filter(x => x.id !== id);
+            object = object_temp;
+
+            var header = document.getElementById("list-header_" + i);
+            var content = document.getElementById("list-content_" + i);
+            document.getElementById("container_" + i).removeChild(header);
+            document.getElementById("container_" + i).removeChild(content);
+            window.alert("已完成刪除");
+        }
+
+    }
+    function showList2Web(bool) {
+
+        var htmlTarget = document.getElementById("wrap");
+        htmlTarget.innerHTML = "";
+        if (bool == true) {
+            for (let i = 0; i < object.length; i++) {
+                if (object[i].isDelete == false && object[i].hasAttr.isnew == false) {
+                    showList(i);
+                }
+            }
+        }
+        else {
+            for (let i = 0; i < object.length; i++) {
+                if (object[i].isDelete == true && object[i].hasAttr.isnew == false) {
+                    showList(i);
+                }
+            }
+        }
+    }
+    function showMyTasks() {
+
+        var htmlTarget = document.getElementById("wrap");
+        htmlTarget.innerHTML = "";
+        for (let i = 0; i < object.length; i++) {
+            if (i == 0) {
+                initialization(i);
+            }
+            else {
+                showList(i);
+            }
+        }
+    }
+    function showTrash() {
+        var htmlTarget = document.getElementById("wrap");
+        htmlTarget.innerHTML = "";
+        for (let i = 0; i < trash.length; i++) {
+            var htmlTarget = document.getElementById("wrap");
+            var target = trash[i];
+            var star_css = target.hasAttr.important == true ? 'fas' : 'far';
+            var container_css = target.hasAttr.important == true ? 'important-to-do' : '';
+            var headericon_deadline = target.hasAttr.hasDate == true ? '<i class="far fa-calendar-alt"></i>' : '';
+            var headericon_comment = target.hasAttr.hascomment == true ? '<i class="far fa-comment-dots"></i>' : '';
+
+            htmlTarget.insertAdjacentHTML("beforeend",
+                `
+                <div id="container_${i}" class="container ${container_css}">
+                    <div id="list-header_${i}" class="list-header list-header-old old">
+                        <div class="list-box list-box-old">
+                            <div class="list-box-left list-box-old">
+                                <input id="checkbox_${i}" class="checkbox" type="checkbox" onclick="isDelete('${target.id}',${i})">
+                                <input id="title_${i}" class="listname ${container_css}" type="text" placeholder="Type Something Here…" value="${target.name}">
+                            </div>
+                            <div class="list-box-right list-box-old">
+                                <i id="star_${i}" class="${star_css} fa-star" onclick="starClick('${target.id}',${i})"></i>
+                                <i id="pen_${i}" class="fas fa-pen" onclick="penClick(${i})"></i>
+                                <i class="fas fa-trash-alt" onclick="deleteTask('${target.id}',${i})"></i>
+                            </div>
+                        </div>
+                        <div id="subheader_${i}" class="content-status-icon">
+                            ${headericon_deadline}
+                            <p>${target.date}</p>
+                            ${headericon_comment}
+                        </div>
+                    </div>
+                    <div id="list-content_${i}" class="list-content old-list hidden">
+                        <div class="item-name">
+                            <i class="far fa-calendar-alt"></i>
+                            <span>Deadline</span>
+                        </div>
+                        <div class="item-content">
+                            <input id="date_${i}" type="date" placeholder="yyyy/mm/dd" value="${target.date}">
+                            <input id="time_${i}" type="time" placeholder="hh:mm" value="${target.time}">
+                        </div>
+                        <div class="item-name">
+                            <i class="far fa-file"></i>
+                            <span>File</span>
+                        </div>
+                        <div class="item-content">
+                            <i class="fas fa-plus-square file-icon"></i>
+                        </div>
+                        <div class="item-name">
+                            <i class="far fa-comment-dots"></i>
+                            <span>Comment</span>
+                        </div>
+                        <div class="item-content">
+                            <textarea id="comment_${i}" name="Tye" id="" cols="50" rows="5" placeholder="Type your memo here…">${target.comment}</textarea>
+                        </div>
+                            <div class="footer">
+                            <div class="cancel">Cancel</div>
+                            <div class="addtask" onclick="saveTask('${target.id}',${i})">Save Task</div>
+                        </div>
+                    </div>
+                    
+                </div>
+                `
+            )
+        }
+    }
+
+    function _uuid() {
+        var d = Date.now();
+        if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+            d += performance.now(); //use high-precision timer if available
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+</script>
